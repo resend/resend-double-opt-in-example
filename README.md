@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Resend with Double Opt-In
 
-## Getting Started
+This is a simple example of how to use Resend with double opt-in for an Audience. It uses the [Next.js App Router](https://nextjs.org/docs/app) and [Resend](https://resend.com) audiences.
 
-First, run the development server:
+## Deploy your own
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Deploy the example using [Vercel](https://vercel.com):
+
+<!-- TODO: add link -->
+
+## Instructions
+
+1. Define environment variables in `.env` file.
+
+```sh
+cp .env.example .env
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> [!NOTE]
+> `SECRET_PASSPHRASE` is a string of your choosing. Make it unique and complex.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. Install dependencies:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```sh
+npm install
+# or
+yarn
+```
 
-## Learn More
+3. Run Next.js locally:
 
-To learn more about Next.js, take a look at the following resources:
+```sh
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. Sign up using the form on the homepage.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The form will add the user to the audience as an unsubscribed contact and send a confirmation email.
 
-## Deploy on Vercel
+5. Check your inbox for a confirmation email.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Confirming the subscription will change the user to a subscribed contact.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+MIT License
