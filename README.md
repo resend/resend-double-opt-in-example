@@ -22,15 +22,13 @@ cp .env.example .env
 2. Install dependencies:
 
 ```sh
-npm install
-# or
-yarn
+pnpm install
 ```
 
 3. Run Next.js locally:
 
 ```sh
-npm run dev
+pnpm dev
 ```
 
 4. Sign up using the form on the homepage.
