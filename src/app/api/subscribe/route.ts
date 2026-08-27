@@ -5,28 +5,46 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
-	const { email } = await request.json();
+  const { email } = await request.json();
 
-	// Add to audience as unsubscribed
-	await resend.contacts.create({
-		email,
-		unsubscribed: true,
-		audienceId: process.env.RESEND_AUDIENCE_ID as string,
-	});
+  // Add to audience as unsubscribed
+  const { data, error } = await resend.contacts.create({
+    email,
+    unsubscribed: true,
+    segments: [{ id: process.env.RESEND_SEGMENT_ID! }],
+  });
+  if (error) {
+    return NextResponse.json(
+      {
+        error: "Could not subscribe. See the logs for details.",
+      },
+      { status: 400 },
+    );
+  }
 
-	// Generate a token with encrypted email and timestamp
-	const tokenData = `${email}:${Date.now()}`;
-	const token = encrypt(tokenData);
+  // Generate a token with encrypted email and timestamp
+  const tokenData = `${email}:${Date.now()}`;
+  const token = encrypt(tokenData);
 
-	const confirmationLink = `${process.env.NEXT_PUBLIC_APP_URL}/confirm?token=${encodeURIComponent(token)}`;
+  const confirmationLink = `${process.env.NEXT_PUBLIC_APP_URL}/confirm?token=${encodeURIComponent(token)}`;
 
-	// Send confirmation email
-	await resend.emails.send({
-		from: process.env.RESEND_SEND_FROM_EMAIL as string,
-		to: email,
-		subject: "Confirm your subscription",
-		html: `<p>Please click <a href="${confirmationLink}">here</a> to confirm your subscription.</p>`,
-	});
+  // Send confirmation email
+  const { error } = await resend.emails.send({
+    from: process.env.RESEND_SEND_FROM_EMAIL as string,
+    to: email,
+    subject: "Confirm your subscription",
+    html: `<p>Please click <a href="${confirmationLink}">here</a> to confirm your subscription.</p>`,
+  });
+  if (error) {
+    return NextResponse.json(
+      {
+        error: "Could not send email. See the logs for details.",
+      },
+      { status: 400 },
+    );
+  }
 
-	return NextResponse.json({ message: "Confirmation email sent" });
+  return NextResponse.json({
+    message: "Confirmation email sent. Check your inbox.",
+  });
 }
